@@ -88,8 +88,6 @@ func (t *Threadman) worker(tParam *Task) {
 		t.wg.Done()
 	}()
 
-	//t.DebugLogger.Printf(nil, "Thread %d worker is running task %d", t.ID, tParam.ID)
-
 	tParam.Result = tParam.Func()
 	t.runningCounter.Add(^uint64(0))
 	t.doneCounter.Add(1)
@@ -100,12 +98,9 @@ func (t *Threadman) worker(tParam *Task) {
 		}
 	}(tParam)
 
-	//t.DebugLogger.Printf(nil, "Thread %d worker is done running task %d", t.ID, tParam.ID)
 }
 
 func (t *Threadman) prepareStandbyRun() {
-	//t.DebugLogger.Printf(nil, "Preparing thread %d channel", t.ID)
-
 	if t.WorkerLimit < 1 {
 		t.WorkerLimit = workerLimit
 	}
@@ -123,9 +118,7 @@ func (t *Threadman) prepareStandbyRun() {
 // please note that if you set notify to true, you should listen to TaskDoneNotifier and TaskRunNotifier
 // or you will get deadlock (full channel)
 func (t *Threadman) StandbyRun() {
-	//t.DebugLogger.Printf(nil, "Running thread %d", t.ID)
 	if t.running {
-		//t.DebugLogger.Printf(nil, "Thread %d is already running", t.ID)
 		return
 	}
 
@@ -135,7 +128,6 @@ func (t *Threadman) StandbyRun() {
 	t.running = true
 	t.prepareStandbyRun()
 
-	//t.DebugLogger.Printf(nil, "Starting thread %d worker", t.ID)
 	go func() {
 		for {
 			select {
@@ -143,7 +135,6 @@ func (t *Threadman) StandbyRun() {
 				return
 			case task, open := <-t.taskCh:
 				if !open {
-					//t.DebugLogger.Printf(nil, "Thread %d worker is closed", t.ID)
 					return
 				}
 
@@ -177,7 +168,6 @@ func (t *Threadman) StandbyRun() {
 		t.standbyTasks.Clear()
 	}()
 
-	//t.DebugLogger.Printf(nil, "Thread %d is running", t.ID)
 }
 
 func (t *Threadman) Stop() {
@@ -210,8 +200,6 @@ func (t *Threadman) Stop() {
 }
 
 func (t *Threadman) AddTask(task func() interface{}) {
-	//t.DebugLogger.Printf(nil, "Adding task to thread %d", t.ID)
-
 	if t.seqTaskID < 1 {
 		t.seqTaskID = 1
 	}
@@ -234,8 +222,6 @@ func (t *Threadman) AddTask(task func() interface{}) {
 		t.standbyTasks.Append(taskCreated)
 		t.standByCounter.Add(1)
 	}
-
-	//t.DebugLogger.Printf(nil, "Task added to thread %d with id %d", t.ID, taskCreated.ID)
 }
 
 func (t *Threadman) IsRunning() bool {

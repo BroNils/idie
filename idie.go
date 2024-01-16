@@ -1,4 +1,3 @@
-// Demo code for a timer based update
 package main
 
 import (
@@ -29,7 +28,6 @@ const (
 )
 
 var (
-	//appMutex                  sync.Mutex
 	resultMutex sync.Mutex
 	resultWg    sync.WaitGroup
 

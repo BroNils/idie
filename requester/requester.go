@@ -47,7 +47,6 @@ func (r *Requester) PingTcp(ip string, port int) bool {
 
 	conn, err := net.DialTimeout("tcp", address, pingTimeOut)
 	if err != nil {
-		//r.FileLogger.Printf("Error connecting to %s: %s\n", address, err)
 		return false
 	}
 	if conn == nil {
@@ -57,11 +56,10 @@ func (r *Requester) PingTcp(ip string, port int) bool {
 	defer func(conn net.Conn) {
 		err := conn.Close()
 		if err != nil {
-			//r.FileLogger.Printf("Error closing connection to %s: %s\n", address, err)
+			//
 		}
 	}(conn)
 
-	//r.FileLogger.Printf("%s is open\n", address)
 	return true
 }
 
@@ -88,7 +86,7 @@ func (r *Requester) NmapSyn(ip string, port int) (ipRet string, portRet int, isO
 
 	result, warnings, err := scanner.Run()
 	if len(*warnings) > 0 {
-		// log.Printf("run finished with warnings: %s\n", *warnings) // Warnings are non-critical errors from nmap.
+		//
 	}
 	if err != nil {
 		panic(fmt.Sprintf("unable to run nmap scan: %v", err))
